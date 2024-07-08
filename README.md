@@ -1,1 +1,1 @@
-# image_similarity
+# image similarity
