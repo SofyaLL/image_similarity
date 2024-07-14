@@ -1,0 +1,3 @@
+matplotlib
+opencv_python
+notebook
