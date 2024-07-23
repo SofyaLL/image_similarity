@@ -1,6 +1,7 @@
 from typing import List, Tuple
 
 import cv2
+import matplotlib.pyplot as plt
 import numpy as np
 
 orb = cv2.ORB_create(nfeatures=150)
@@ -74,26 +75,33 @@ def image_resize(image: np.ndarray, maxD: int = 256) -> np.ndarray:
     return image
 
 
-def calculate_score(
-    keypoints_1: List[cv2.KeyPoint],
-    descriptor_1: np.ndarray,
-    keypoints_2: List[cv2.KeyPoint],
-    descriptor_2: np.ndarray,
-) -> float:
-    """
-    Calculate the matching score between two sets of ORB keypoints and descriptors.
+def calculate_similarity(path_1: str, path_2: str, show_plot: bool = False) -> float:
+    image_1 = image_resize(cv2.imread(path_1))
+    image_2 = image_resize(cv2.imread(path_2))
+    gray_image_1 = cv2.cvtColor(image_1, cv2.COLOR_BGR2GRAY)
+    gray_image_2 = cv2.cvtColor(image_2, cv2.COLOR_BGR2GRAY)
 
-    Parameters:
-    keypoints_1 (list): A list of keypoints from the first image.
-    descriptor_1 (numpy.ndarray): Descriptors corresponding to the keypoints of the first image.
-    keypoints_2 (list): A list of keypoints from the second image.
-    descriptor_2 (numpy.ndarray): Descriptors corresponding to the keypoints of the second image.
+    keypoints_1, descriptor_1 = compute_orb(gray_image_1)
+    keypoints_2, descriptor_2 = compute_orb(gray_image_2)
+    good_matches = calculate_matches(descriptor_1, descriptor_2)
+    score = 100 * (len(good_matches) / max(len(keypoints_1), len(keypoints_2)))
 
-    Returns:
-    float: A matching score between 0 and 100, rounded to three decimal places.
-           The score is calculated as the ratio of the number of good matches
-           to the maximum number of keypoints in either image expressed as a percentage.
-    """
-    matches = calculate_matches(descriptor_1, descriptor_2)
-    score = 100 * (len(matches) / max(len(keypoints_1), len(keypoints_2)))
-    return round(score, 3)
+    if show_plot:
+        rgb_image_1 = cv2.cvtColor(image_1, cv2.COLOR_BGR2RGB)
+        rgb_image_2 = cv2.cvtColor(image_2, cv2.COLOR_BGR2RGB)
+
+        match_plot = cv2.drawMatchesKnn(
+            rgb_image_1,
+            keypoints_1,
+            rgb_image_2,
+            keypoints_2,
+            good_matches,
+            None,
+            [255, 255, 255],
+            flags=2,
+        )
+
+        plt.imshow(match_plot)
+        plt.title(f"Score: {round(score, 2)}")
+        plt.axis("off")
+    return score
