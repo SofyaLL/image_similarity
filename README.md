@@ -1,6 +1,6 @@
 # Fast Image Similarity
 
-![](images/example.gif )
+![](images/example.gif)
 
 ## Introduction
 This code allows you to calculate a similarity score between images. The algorithm can be used in projects where you need to find similar images from a collection of images. It works well on images containing the same objects, such as grocery goods or product labels.
@@ -31,7 +31,7 @@ score = calculate_similarity(image1, image2, show_plot=True)
 ## Examples
 Examples of calculating similarity scores can be found in `example.ipynb`
 
-## Time consuption
+## Performance
 
 I provide results of some experiments to show that the ORB feature detector can be optimized in terms of time consumption.. It can be important in real-time products. 
 
