@@ -1,6 +1,6 @@
 # Fast Image Similarity
 
-![](images/example.gif)
+<img src="images/example.gif" width="25%"/>
 
 ## Introduction
 This code allows you to calculate a similarity score between images. The algorithm can be used in projects where you need to find similar images from a collection of images. It works well on images containing the same objects, such as grocery goods or product labels.
